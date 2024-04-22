@@ -16,8 +16,26 @@
    package-lock.json
    ```
 
-4. **.gitignore:** add below into .gitignore & data from https://www.toptal.com/developers/gitignore/api/node
+4. ```bash
+   git add .
+   ```
+   # Add all untracked files and changes
+5. ```bash
+   git commit -m "Initial commit"
+   ```
+
+   # Commit the changes with a message
+
+6. **Create a repo in githu and execute these**
 
    ```bash
-   package-lock.json
+   git remote add origin https://github.com/FebzLeoCena/MERN-Auth-App.git
+   git branch -M main
+   git push -u origin main
    ```
+
+7. **Install Redux Toolkit and React-Redux:**Add the Redux Toolkit and React-Redux packages to your project.
+
+```bash
+npm install @reduxjs/toolkit react-redux
+```

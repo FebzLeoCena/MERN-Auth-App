@@ -1,19 +1,28 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess,
+} from '../redux/user/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  const { error, loading } = useSelector((state) => state.user); //The selector function takes the entire Redux store state as its argument and returns the specific piece of data that you want from that state. Whenever the Redux store state changes, React Redux will re-run the selector function to get the new value of the selected data.
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(error);
     try {
-      setLoading(true);
+      // setLoading(true);
+      dispatch(signInStart());
       const res = await fetch('http://localhost:3001/api/auth/signin', {
         method: 'POST',
         headers: {
@@ -22,17 +31,19 @@ export default function SignIn() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      setError(false);
 
-      console.log('jjj', data, error);
+      console.log('test1', data, error);
       if (data.success == false) {
-        console.log('jjja', data, error);
-        setError(true);
+        console.log('test2', data, error);
+        dispatch(signInFailure(data));
+        return;
       }
-      setLoading(false);
+      console.log('test3', data, error);
+
+      dispatch(signInSuccess(data));
       navigate('/');
     } catch (err) {
-      setLoading(false);
+      dispatch(signInFailure(err));
     }
   };
   return (
@@ -69,7 +80,9 @@ export default function SignIn() {
           <span className=' text-blue-600'>Sign up</span>
         </Link>
       </div>
-      <p className=' text-red-600'>{error ? 'Something went wrong' : ''}</p>
+      <p className=' text-red-600'>
+        {error ? error.message || 'Something went wrong' : ''}
+      </p>
     </div>
   );
 }
