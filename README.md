@@ -104,3 +104,15 @@ In this setup:
 - `persistor` is passed to `PersistGate` to coordinate the loading and persisting of state.
 
 This setup will persist your Redux store's state to local storage by default. However, you can configure it to use other storage options, such as AsyncStorage for React Native apps or custom storage engines. Check the `redux-persist` documentation for more advanced configurations and options.
+
+9. **Firebase**: firebase config
+
+   ```bash
+   npm i firebase
+   ```
+
+10. **Redux persist**: to push the store into the local storage
+
+```bash
+npm i redux-persist
+```
