@@ -1,4 +1,11 @@
 {
   "prettier.jsxSingleQuote": true,
-  "prettier.singleQuote": true
+  "prettier.singleQuote": true,
+  "docwriter.hotkey.windows": "Alt + .",
+  "editor.inlineSuggest.suppressSuggestions": false,
+  "editor.quickSuggestions": {
+    "comments": "inline",
+    "strings": "inline"
+  },
+  "editor.quickSuggestionsDelay": 1
 }
