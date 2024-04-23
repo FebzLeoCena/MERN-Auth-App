@@ -116,3 +116,9 @@ This setup will persist your Redux store's state to local storage by default. Ho
 ```bash
 npm i redux-persist
 ```
+
+11. **Cookie Parser**:install out of the client side
+
+```bash
+npm i cookie-parser
+```

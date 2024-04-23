@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.route.js';
 
 import cors from 'cors';
 import statusMonitor from 'express-status-monitor';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 // Use express-status-monitor middleware
@@ -26,8 +27,15 @@ mongoose
 
 // Enable CORS for all routes
 app.use(cors());
+// app.use(
+//   cors({
+//     origin: 'http://localhost:3000', // Replace with your frontend URL
+//     credentials: true, // Allow credentials (cookies) to be sent cross-origin
+//   })
+// );
 
 app.use(express.json()); // to allow json as an input
+app.use(cookieParser());
 
 app.listen(3001, () => {
   console.log('listening on port 3001!');

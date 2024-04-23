@@ -48,9 +48,9 @@ export const signin = async (req, res, next) => {
     const expiryDate = new Date(Date.now() + 3600000); //milliseconds 1 hhour
     res
       .cookie('access_token', token, {
-        httpOnly: true,
         expires: expiryDate,
-        sameSite: 'None',
+        // sameSite: 'None',
+        httpOnly: true,
       })
       .status(200)
       .json(rest);
@@ -67,6 +67,8 @@ export const google = async (req, res, next) => {
       console.log('google in 2');
 
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      console.log('CookieTestToken1', token);
+
       const { password: hashedPassword, ...rest } = user._doc;
       const expiryDate = new Date(Date.now() + 3600000); //milliseconds 1 hhour
       res
@@ -93,6 +95,8 @@ export const google = async (req, res, next) => {
       });
       await newUser.save();
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      console.log('CookieTestToken2', token);
+
       const { password: hashedPassword2, ...rest } = newUser._doc;
       const expiryDate = new Date(Date.now() + 3600000); //milliseconds 1 hhour
       res
