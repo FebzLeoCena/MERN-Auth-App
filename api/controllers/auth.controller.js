@@ -30,10 +30,15 @@ export const signin = async (req, res, next) => {
 
   try {
     const validateUser = await User.findOne({ email });
-    console.log('validateUser', req.body, validateUser);
+    // console.log('validateUser', req.body, validateUser);
 
-    if (!validateUser)
-      res.status(404).json({ success: false, message: 'User not Found' });
+    if (!validateUser) {
+      console.log('validateUser', req.body, validateUser);
+      return res
+        .status(404)
+        .json({ success: false, message: 'User not Found' });
+    }
+
     const { password: hashedPassword, ...rest } = validateUser._doc;
     const validatePassword = bcryptjs.compareSync(
       password,
@@ -42,7 +47,7 @@ export const signin = async (req, res, next) => {
     console.log('validatePassword', req.body, validatePassword);
 
     if (!validatePassword)
-      res.status(401).json({ success: false, message: 'Invalid Cred' });
+      return res.status(401).json({ success: false, message: 'Invalid Cred' });
 
     const token = jwt.sign({ id: validateUser._id }, process.env.JWT_SECRET);
     const expiryDate = new Date(Date.now() + 3600000); //milliseconds 1 hhour
@@ -140,4 +145,7 @@ export const google = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+export const signout = (req, res) => {
+  res.clearCookie('access_token').status(200).json('Signout success!');
 };

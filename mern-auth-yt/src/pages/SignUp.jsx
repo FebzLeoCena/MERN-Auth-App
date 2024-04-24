@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import { baseAPI } from '../utils';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -16,25 +17,30 @@ export default function SignUp() {
     console.log(error);
     try {
       setLoading(true);
-      const res = await fetch('http://localhost:3001/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
+      const response = await baseAPI.post('/auth/signup', formData);
+      console.log(response);
+
+      const data = response.data;
+      // const res = await fetch('http://localhost:3001/api/auth/signup', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(formData),
+      // });
+      // const data = await res.json();
       setError(false);
 
-      console.log('jjj', data, error);
-      if (data.success == false) {
+      if (data.success === false) {
         console.log('jjja', data, error);
         setError(true);
       }
       setLoading(false);
       navigate('/sign-in');
     } catch (err) {
+      //console.log('jjj', err.response.data.error);
       setLoading(false);
+      setError(err);
     }
   };
   return (

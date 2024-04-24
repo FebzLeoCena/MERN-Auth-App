@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   signInFailure,
@@ -7,6 +7,7 @@ import {
 } from '../redux/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import OAuth from '../components/OAuth';
+import { baseAPI } from '../utils';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -18,32 +19,55 @@ export default function SignIn() {
   };
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  useEffect(() => {
+    // Clear error state when component unmounts
+    return () => {
+      dispatch(signInFailure(null));
+    };
+  }, [dispatch]);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(error);
+
     try {
       // setLoading(true);
       dispatch(signInStart());
-      const res = await fetch('http://localhost:3001/api/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
+      await baseAPI
+        .post('/auth/signin', formData)
+        .then((response) => {
+          // if (!response.data.success && response.status === 404) {
+          //   console.log('User not found');
+          //   dispatch(signInFailure({ message: 'User not Found' }));
+          //   return;
+          // }
+          console.log('KGF0');
+          if (!response.data.success) {
+            console.log('Other error occurred:', response.data.message);
+            dispatch(signInFailure(response.data));
+            return;
+          }
 
-      console.log('test1', data, error);
-      if (data.success === false) {
-        console.log('test2', data, error);
-        dispatch(signInFailure(data));
-        return;
-      }
-      console.log('test3', data, error);
+          dispatch(signInSuccess(response.data));
+          navigate('/');
+        })
+        .catch((e) => {
+          if (e.response.status === 404) {
+            console.log('KGF');
+          }
+        });
+      // console.log(response);
+      // const res = await fetch('http://localhost:3001/api/auth/signin', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(formData),
+      // });
+      // const data = await res.json();
 
-      dispatch(signInSuccess(data));
-      navigate('/');
+      // console.log('test1', data, error);
     } catch (err) {
+      // Handle other errors
+      console.error('Error occurred:', err);
       dispatch(signInFailure(err));
     }
   };

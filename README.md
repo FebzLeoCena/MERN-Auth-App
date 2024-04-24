@@ -122,3 +122,35 @@ npm i redux-persist
 ```bash
 npm i cookie-parser
 ```
+
+12.**Build**:`package.json` file:
+
+```json
+"scripts": {
+"dev": "nodemon api/index.js",
+"start": "node api/index.js",
+"build": "npm install && npm install --prefix mern-auth-yt && npm run build --prefix mern-auth-yt"
+},
+```
+
+The `build` script typically refers to a set of commands that prepare an application for deployment. In this specific script:
+
+- `npm install`: This command installs dependencies for the server-side part of the application.
+- `npm install --prefix mern-auth-yt`: This command installs dependencies for the client-side part of the application, assuming that the client-side code is located in a directory named `mern-auth-yt` within the project directory.
+- `npm run build --prefix mern-auth-yt`: This command runs the build script for the client-side code, which could involve tasks such as transpilation, bundling, minification, and other optimizations. The `--prefix mern-auth-yt` option ensures that the command is executed within the `mern-auth-yt` directory.
+
+In summary, the `build` script is responsible for preparing both the server-side and client-side parts of the application for deployment by installing dependencies and building the client-side code. This script is often used in projects that have separate server and client directories, such as full-stack web applications or projects that use front-end frameworks like React, Vue.js, or Angular.
+
+**Build Command**
+This command runs in the root directory of your repository when a new version of your code is pushed, or when you deploy manually. It is typically a script that installs libraries, runs migrations, or compiles resources needed by your app.
+
+```bash
+npm run build
+```
+
+**Start Command**
+This command runs in the root directory of your app and is responsible for starting its processes. It is typically used to start a webserver for your app. It can access environment variables defined by you in Render.
+
+```bash
+npm start
+```
