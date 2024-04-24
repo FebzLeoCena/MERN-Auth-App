@@ -12,6 +12,8 @@ import {
   updateUserSuccess,
   updateUserfailure,
 } from '../redux/user/userSlice';
+import axios from 'axios';
+import { baseAPI } from '../utils';
 
 export default function Profile() {
   const [img, setImg] = useState(undefined);
@@ -21,7 +23,7 @@ export default function Profile() {
   console.log(formData);
   console.log('imgUploadPercentage', imgUploadPercentage);
 
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
   const fileRef = useRef(null);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -59,19 +61,24 @@ export default function Profile() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(updateUserStart());
     try {
-      const res = await fetch(
-        `http://localhost:3001/api/user/update/${currentUser._id}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        }
+      dispatch(updateUserStart());
+      const response = await baseAPI.post(
+        `/user/update/${currentUser._id}`,
+        formData
       );
-      const data = await res.json();
+      const data = response.data;
+      // const res = await fetch(
+      //   `http://localhost:3001/api/user/update/${currentUser._id}`,
+      //   {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify(formData),
+      //   }
+      // );
+      // const data = await res.json();
       console.log(data);
       if (data.success === false) {
         dispatch(updateUserfailure(data));
@@ -137,8 +144,8 @@ export default function Profile() {
           autoComplete='current-password'
           onChange={handleChange}
         />
-        <button className='bg-slate-700 text-white p-3 rouded-lg uppercase hover:opacity-95 disabled:opacity-80'>
-          Update
+        <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>
+          {loading ? 'Loading...' : 'Update'}
         </button>
       </form>
       <div className='flex justify-between mt-5'>

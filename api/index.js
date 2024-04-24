@@ -10,6 +10,7 @@ import statusMonitor from 'express-status-monitor';
 import cookieParser from 'cookie-parser';
 
 const app = express();
+
 // Use express-status-monitor middleware
 app.use(statusMonitor());
 app.use(express.urlencoded({ extended: false }));
@@ -26,16 +27,18 @@ mongoose
   });
 
 // Enable CORS for all routes
-app.use(cors());
-// app.use(
-//   cors({
-//     origin: 'http://localhost:3000', // Replace with your frontend URL
-//     credentials: true, // Allow credentials (cookies) to be sent cross-origin
-//   })
-// );
-
-app.use(express.json()); // to allow json as an input
+// app.use(cors());
+app.use(
+  cors({
+    origin: [
+      'http://localhost:3000',
+      'https://mern-auth-app1-80228.firebaseapp.com',
+    ],
+    credentials: true,
+  })
+);
 app.use(cookieParser());
+app.use(express.json()); // to allow json as an input
 
 app.listen(3001, () => {
   console.log('listening on port 3001!');

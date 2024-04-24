@@ -47,11 +47,21 @@ export const signin = async (req, res, next) => {
     const token = jwt.sign({ id: validateUser._id }, process.env.JWT_SECRET);
     const expiryDate = new Date(Date.now() + 3600000); //milliseconds 1 hhour
     res
-      .cookie('access_token', token, {
-        expires: expiryDate,
-        // sameSite: 'None',
-        httpOnly: true,
-      })
+      .cookie(
+        'access_token',
+        token,
+        {
+          withCredentials: true,
+          sameSite: 'none',
+          secure: true,
+          httpOnly: true,
+        }
+        // {
+        //   expires: expiryDate,
+        //   // sameSite: 'None',
+        //   httpOnly: true,
+        // }
+      )
       .status(200)
       .json(rest);
   } catch (error) {
@@ -72,10 +82,20 @@ export const google = async (req, res, next) => {
       const { password: hashedPassword, ...rest } = user._doc;
       const expiryDate = new Date(Date.now() + 3600000); //milliseconds 1 hhour
       res
-        .cookie('access_token', token, {
-          expires: expiryDate,
-          httpOnly: true,
-        })
+        .cookie(
+          'access_token',
+          token,
+          {
+            withCredentials: true,
+            sameSite: 'none',
+            secure: true,
+            httpOnly: true,
+          }
+          // {
+          //   expires: expiryDate,
+          //   httpOnly: true,
+          // }
+        )
         .status(200)
         .json(rest);
     } else {
@@ -100,10 +120,20 @@ export const google = async (req, res, next) => {
       const { password: hashedPassword2, ...rest } = newUser._doc;
       const expiryDate = new Date(Date.now() + 3600000); //milliseconds 1 hhour
       res
-        .cookie('access_token', token, {
-          expires: expiryDate,
-          httpOnly: true,
-        })
+        .cookie(
+          'access_token',
+          token,
+          {
+            withCredentials: true,
+            sameSite: 'none',
+            secure: true,
+            httpOnly: true,
+          }
+          //  {
+          //   expires: expiryDate,
+          //   httpOnly: true,
+          // }
+        )
         .status(200)
         .json(rest);
     }
